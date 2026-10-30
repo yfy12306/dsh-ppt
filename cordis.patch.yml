@@ -1,0 +1,19 @@
+# dsh-ppt bundle patch：注入「真实 PowerPoint 做 PPT + 实时预览」插件（host 半 + client 半）。
+# host 半：以 stdio 起 Python 引擎（MCP 工具面 ppt_*/zotero_*），
+#          代理引擎只读侧车为同源路由 /ppt/*，注册 /ppt 命令与 dsh-ppt Skill。
+# client 半：输入框右侧实时预览芯片 + 弹层（当前页缩略图 + 操作流水字幕）。
+# 卸载：删掉 profile 的 cordis.patch.yml 里 id: dsh-ppt 那段 + package.json 依赖，重启 DSH。
+- insert:
+    - id: dsh-ppt
+      name: 'dsh-ppt'
+      config:
+        enabled: true
+        livePort: 8790
+        visible: true          # true = 弹出真实 PowerPoint 窗口，用户实时观看
+        backend: auto          # auto | ms-office | wps
+        theme: default         # default（干净商务）| 自定义主题 id
+        autoPdf: true
+        snapshotScale: 960
+        quitOnExit: false      # 退出时不杀 PowerPoint，保留窗口给用户看
+        skillEnabled: true
+        routePrefix: /ppt

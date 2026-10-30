@@ -1,0 +1,59 @@
+{
+  "name": "dsh-ppt",
+  "description": "DSH 的 PPT 制作插件：用真实 Microsoft PowerPoint/WPS COM 生成演示文稿（JSON 数据驱动 + default 风格（支持自定义主题） + 按调研落地的排版/动画/配色 + matplotlib 图表 + PDF 落盘校验 + Zotero 参考文献页），并在 PowerPoint 窗口与 DSH 预览面板里实时可见。精华抽取自 harness-anything（MIT）。",
+  "version": "1.1.1",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "engine/server.py",
+    "engine/pptx_engine/*.py",
+    "engine/requirements.txt",
+    "cordis.patch.yml",
+    "scripts/smoke.py",
+    "scripts/validate.mjs",
+    "CHANGELOG.md"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "smoke": "python scripts/smoke.py",
+    "smoke:headless": "python scripts/smoke.py --headless",
+    "validate": "node scripts/validate.mjs",
+    "hostload": "node scripts/test-host-load.mjs",
+    "preflight": "node scripts/preflight.mjs"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-mcp-client": "*",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.2.0-rc.1"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "compatibility": {
+      "dsh": "DSH Desktop 2.0.17 (bundled host 0.2.0-rc.2)",
+      "verified": [
+        "MCP stdio 面挂载（自研零依赖协议层，serverName=ppt）",
+        "实时预览侧车代理（/ppt/* 同源路由，仅回环）",
+        "client 半 slot: conversation.input.right（list 型需 options.id）",
+        "skills.register 运行时 Skill：dsh-ppt"
+      ],
+      "note": "引擎依赖 pywin32 + Pillow（本机 hermes venv 已带）；升级 DSH 后跑 npm run validate"
+    }
+  }
+}
